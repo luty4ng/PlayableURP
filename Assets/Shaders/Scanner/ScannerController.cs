@@ -22,7 +22,6 @@ public class ScannerController : MonoBehaviour
 
     void Update()
     {
-        
         m_CachedMaterial.SetFloat("_ScanDistance", ScanDistance);
         m_CachedMaterial.SetVector("_WorldSpaceScannerPos", ScannerOrigin.position);
 

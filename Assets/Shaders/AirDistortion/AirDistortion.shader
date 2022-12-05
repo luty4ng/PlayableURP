@@ -1,4 +1,4 @@
-Shader "/Extended-URP/AirDistortion"
+Shader "Practical-URP/AirDistortion"
 {
     SubShader
     {

@@ -1,4 +1,4 @@
-Shader "/Extended-URP/Base/BillBoard"
+Shader "Practical-URP/Base/BillBoard"
 {
 
     Properties

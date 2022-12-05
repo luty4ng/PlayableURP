@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8117349538831300857
+--- !u!114 &-2707932268382195959
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90add8d69e553a746bc5b38f86b8e35d, type: 3}
-  m_Name: DepthNormals
+  m_Script: {fileID: 11500000, guid: 425d201c741ce174ea3d5219da030385, type: 3}
+  m_Name: CameraColorTextureFeature
   m_EditorClassIdentifier: 
   m_Active: 1
+  renderPassEvent: 500
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23,15 +24,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
-  m_Name: ScannerRenderer
+  m_Name: CameraColorTextureRenderer
   m_EditorClassIdentifier: 
   debugShaders:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7,
       type: 3}
   m_RendererFeatures:
-  - {fileID: -8117349538831300857}
-  - {fileID: 4849701104906088791}
-  m_RendererFeatureMap: 0787471c9a61598f5731bfc875994d43
+  - {fileID: -2707932268382195959}
+  - {fileID: 1558477374216119570}
+  m_RendererFeatureMap: 09ef42fbf27d6bda12a5a228ead2a015
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -71,7 +72,7 @@ MonoBehaviour:
   m_ClusteredRendering: 0
   m_TileSize: 32
   m_IntermediateTextureMode: 1
---- !u!114 &4849701104906088791
+--- !u!114 &1558477374216119570
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -80,10 +81,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a611d581d494fd6478040fda6a2db8bc, type: 3}
-  m_Name: ScannerRenderFeature
+  m_Script: {fileID: 11500000, guid: 3ff33e12533b7c24f9e9999e8f83daab, type: 3}
+  m_Name: CustomDrawFeature
   m_EditorClassIdentifier: 
   m_Active: 1
   setting:
-    material: {fileID: 2100000, guid: 544dcb3d8963f6a49bd7eb2f903954c3, type: 2}
-    renderPassEvent: 500
+    profilerTag: 
+    renderPassEvent: 600

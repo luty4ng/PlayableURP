@@ -1,4 +1,4 @@
-Shader "/Extended-URP/Base/WorldSpacePosition"
+Shader "Practical-URP/Base/WorldSpacePosition"
 {
     Properties
     {

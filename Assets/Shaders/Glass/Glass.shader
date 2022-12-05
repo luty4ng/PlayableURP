@@ -1,4 +1,4 @@
-Shader "/Extended-URP/Glass"
+Shader "Practical-URP/Glass"
 {
     Properties
     {

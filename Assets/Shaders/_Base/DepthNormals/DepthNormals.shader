@@ -1,4 +1,4 @@
-Shader "/Extended-URP/Base/DepthNormalsTexture"
+Shader "Practical-URP/Base/DepthNormalsTexture"
 {
     SubShader
     {

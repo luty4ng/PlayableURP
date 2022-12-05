@@ -34,7 +34,7 @@ Material:
     - _LeadSharp: 4.86
     - _NormalSensitivity: 0.1
     - _OUT: 1
-    - _ScanDistance: 3.83
+    - _ScanDistance: 5.52
     - _ScanWidth: 1
     - _Speed: 2.98
     - _StartTime: 0

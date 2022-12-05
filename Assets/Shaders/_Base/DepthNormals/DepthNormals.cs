@@ -91,7 +91,7 @@ public class DepthNormals : ScriptableRendererFeature
     /// <inheritdoc/>
     public override void Create()
     {
-        m_DepthNormalsMaterials = CoreUtils.CreateEngineMaterial("/Extended-URP/Base/DepthNormalsTexture");
+        m_DepthNormalsMaterials = CoreUtils.CreateEngineMaterial("Practical-URP/Base/DepthNormalsTexture");
         m_DepthNormalsPass = new DepthNormalsPass(RenderQueueRange.opaque, -1, m_DepthNormalsMaterials);
         m_DepthNormalsPass.renderPassEvent = RenderPassEvent.AfterRenderingPrePasses;
         m_DepthNormalsTexture.Init("_CameraDepthNormalsTexture");

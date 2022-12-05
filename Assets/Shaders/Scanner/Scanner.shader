@@ -1,4 +1,4 @@
-Shader "/Extended-URP/PostProcessing/Scanner"
+Shader "Practical-URP/PostProcessing/Scanner"
 {
     Properties
     {

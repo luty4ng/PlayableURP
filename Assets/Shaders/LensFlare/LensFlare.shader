@@ -1,4 +1,4 @@
-Shader "/Extended-URP/LensFlare"
+Shader "Practical-URP/LensFlare"
 {
     Properties
     {
