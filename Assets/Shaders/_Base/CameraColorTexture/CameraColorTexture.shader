@@ -4,7 +4,7 @@ Shader "Practical-URP/Base/CameraColorTexture"
     {
         Pass
         {
-            Tags { "LightMode" = "AfterTransparents" "RenderPipeline" = "UniversalPipeline"}
+            Tags { "LightMode" = "AfterTransparents" }
             
             HLSLPROGRAM
             #pragma vertex vert
@@ -14,7 +14,7 @@ Shader "Practical-URP/Base/CameraColorTexture"
 
             TEXTURE2D(_CameraColorTextureAlpha);
             SAMPLER(sampler_CameraColorTextureAlpha);
-        
+            
             struct a2v
             {
                 float4 positionOS : POSITION;
@@ -23,23 +23,21 @@ Shader "Practical-URP/Base/CameraColorTexture"
 
             struct v2f
             {
-                float4 vertex : SV_POSITION;
+                float4 positionCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            v2f vert(a2v input)
+            v2f vert(a2v i)
             {
-                v2f output;
-                VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
-                output.vertex = vertexInput.positionCS;
-                output.uv = input.uv;
-                return output;
+                v2f o;
+                o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
+                o.uv = i.uv;
+                return o;
             }
 
             float4 frag(v2f input) : SV_Target
             {
-                float2 uv = input.uv;
-                return SAMPLE_TEXTURE2D(_CameraColorTextureAlpha, sampler_CameraColorTextureAlpha, uv);
+                return SAMPLE_TEXTURE2D(_CameraColorTextureAlpha, sampler_CameraColorTextureAlpha, input.uv);
             }
             ENDHLSL
         }

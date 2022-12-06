@@ -86,5 +86,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   setting:
-    profilerTag: 
+    profilerTag: AfterTransparents
     renderPassEvent: 600

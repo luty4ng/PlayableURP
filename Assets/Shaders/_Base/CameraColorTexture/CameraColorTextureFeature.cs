@@ -15,7 +15,7 @@ public class CameraColorTextureFeature : ScriptableRendererFeature
         public CameraColorTexturePass(RenderPassEvent passEvent)
         {
             renderPassEvent = passEvent;
-            m_ProfilerTag = "Get Camera Color Texture";
+            m_ProfilerTag = "CameraColorTexture";
             m_TemporaryColorTexture.Init("_CameraColorTextureAlpha");
         }
 
@@ -24,20 +24,11 @@ public class CameraColorTextureFeature : ScriptableRendererFeature
             source = sourceId;
         }
 
-        // This method is called before executing the render pass.
-        // It can be used to configure render targets and their clear state. Also to create temporary render target textures.
-        // When empty this render pass will render to the active camera render target.
-        // You should never call CommandBuffer.SetRenderTarget. Instead call <c>ConfigureTarget</c> and <c>ConfigureClear</c>.
-        // The render pipeline will ensure target setup and clearing happens in a performant manner.
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
 
         }
 
-        // Here you can implement the rendering logic.
-        // Use <c>ScriptableRenderContext</c> to issue drawing commands or execute command buffers
-        // https://docs.unity3d.com/ScriptReference/Rendering.ScriptableRenderContext.html
-        // You don't have to call ScriptableRenderContext.submit, the render pipeline will call it at specific points in the pipeline.
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             CommandBuffer buffer = CommandBufferPool.Get(m_ProfilerTag);
@@ -45,12 +36,12 @@ public class CameraColorTextureFeature : ScriptableRendererFeature
             // opaqueDesc.depthBufferBits = 0;
             buffer.GetTemporaryRT(m_TemporaryColorTexture.id, opaqueDesc, FilterMode.Bilinear);
             Blit(buffer, source, m_TemporaryColorTexture.Identifier());
+            buffer.SetGlobalTexture("_CameraColorTextureAlpha", m_TemporaryColorTexture.id);
             buffer.ReleaseTemporaryRT(m_TemporaryColorTexture.id);
             context.ExecuteCommandBuffer(buffer);
             CommandBufferPool.Release(buffer);
         }
-
-        // Cleanup any allocated resources that were created during the execution of this render pass.
+        
         public override void OnCameraCleanup(CommandBuffer cmd)
         {
 
