@@ -1,89 +1,93 @@
+using System;
+using System.Dynamic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-[ExecuteInEditMode]
 public class BokehBlurFeature : ScriptableRendererFeature
 {
-
     [System.Serializable]
     public class MySetting
     {
-        public string name = "Bokeh Blur";
-        public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
+        public string profilerTag = "Bokeh Blur";
+        public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
         public Material material;
-        [Tooltip("降采样，越大性能越好但是质量越低"), Range(1, 7)] public int downSamping = 2;
-        [Tooltip("迭代次数，越小性能越好但是质量越低"), Range(3, 500)] public int iteration = 50;
-        [Tooltip("采样半径，越大圆斑越大但是采样点越分散"), Range(0.1f, 10)] public float BlurRadius = 1;
-        [Tooltip("模糊过渡的平滑度"), Range(0, 0.5f)] public float BlurSmoothness = 0.1f;
-        [Tooltip("近处模糊结束距离")] public float NearDis = 5;
-        [Tooltip("远处模糊开始距离")] public float FarDis = 9;
+        [Range(1, 10)] public int downSample = 2;
+        [Range(3, 500)] public int iteration = 50;
+        [Range(0.1f, 10)] public int radius = 1;
+        [Range(0, 0.5f)] public float BlurSmoothness = 0.1f;
+        public float NearCullDis = 5;
+        public float FarCullDis = 9;
     }
 
-    public MySetting mysetting = new MySetting();
+    public MySetting setting = new MySetting();
     class CustomRenderPass : ScriptableRenderPass
     {
-        public string name;
-        public Material material;
-        public int iteration;
-        public float BlurSmoothness;
-        public int downSamping;
-        public float BlurRadius;
-        public float NearDis;
-        public float FarDis;
-        RenderTargetIdentifier sour;
-        int width;
-        int height;
-        readonly static int BlurID = Shader.PropertyToID("blur");//申请之后就不在变化
-        readonly static int SourBakedID = Shader.PropertyToID("_SourTex");
-        public void setup(RenderTargetIdentifier Sour)
+        public Material passMat = null;
+        public int passDownSample;
+        public int passIteration;
+        public int passRadius;
+        public float passBlurSmoothness;
+        public float passNearCullDis;
+        public float passFarCullDis;
+        private int width;
+        private int height;
+        public FilterMode passFilterMode { get; set; }
+        private RenderTargetIdentifier passSource { get; set; }
+        private string passProfilerTag;
+        private readonly static int BlurId = Shader.PropertyToID("Blur");
+        private readonly static int SourceId = Shader.PropertyToID("_SourceTex");
+        public CustomRenderPass(string tag)
         {
-            this.sour = Sour;
-            material.SetFloat("_Iteration", iteration);
-            material.SetFloat("_BlurRadius", BlurRadius);
-            material.SetFloat("_NearDis", NearDis);
-            material.SetFloat("_FarDis", FarDis);
-            material.SetFloat("_BlurSmoothness", BlurSmoothness);
+            this.passProfilerTag = tag;
+        }
+
+        public void Setup(RenderTargetIdentifier sour)
+        {
+            this.passSource = sour;
+            passMat.SetFloat("_Iteration", passIteration);
+            passMat.SetFloat("_Radius", passRadius);
+            passMat.SetFloat("_NearDis", passNearCullDis);
+            passMat.SetFloat("_FarDis", passFarCullDis);
+            passMat.SetFloat("_BlurSmoothness", passBlurSmoothness);
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-
-            CommandBuffer cmd = CommandBufferPool.Get(name);
-            RenderTextureDescriptor desc = renderingData.cameraData.cameraTargetDescriptor;
-            width = desc.width / downSamping;
-            height = desc.height / downSamping;
-            cmd.GetTemporaryRT(BlurID, width, height, 0, FilterMode.Bilinear, RenderTextureFormat.ARGB32);
-            cmd.GetTemporaryRT(SourBakedID, desc);
-            cmd.CopyTexture(sour, SourBakedID); //会自动送到shader里
-            cmd.Blit(sour, BlurID, material, 0); //降采样模糊的pass
-            cmd.Blit(BlurID, sour, material, 1); //降采样pass和源图混合输出
+            CommandBuffer cmd = CommandBufferPool.Get(passProfilerTag);
+            RenderTextureDescriptor opaqueDesc = renderingData.cameraData.cameraTargetDescriptor;
+            width = opaqueDesc.width / passDownSample;
+            height = opaqueDesc.height / passDownSample;
+            opaqueDesc.depthBufferBits = 0;
+            cmd.GetTemporaryRT(BlurId, width, height, 0, FilterMode.Bilinear, RenderTextureFormat.ARGB32);
+            cmd.GetTemporaryRT(SourceId, opaqueDesc);
+            cmd.CopyTexture(passSource, SourceId);
+            cmd.Blit(passSource, BlurId, passMat, 0);   // BACKUP
+            cmd.Blit(BlurId, passSource, passMat, 1);   // BLEND
+            cmd.ReleaseTemporaryRT(BlurId);
+            cmd.ReleaseTemporaryRT(SourceId);
             context.ExecuteCommandBuffer(cmd);
-            cmd.ReleaseTemporaryRT(BlurID);
-            cmd.ReleaseTemporaryRT(SourBakedID);
             CommandBufferPool.Release(cmd);
         }
     }
 
-    CustomRenderPass m_ScriptablePass = new CustomRenderPass();
-
+    CustomRenderPass myPass;
     public override void Create()
     {
-        m_ScriptablePass.material = mysetting.material;
-        m_ScriptablePass.iteration = mysetting.iteration;
-        m_ScriptablePass.BlurSmoothness = mysetting.BlurSmoothness;
-        m_ScriptablePass.BlurRadius = mysetting.BlurRadius;
-        m_ScriptablePass.renderPassEvent = mysetting.renderPassEvent;
-        m_ScriptablePass.name = mysetting.name;
-        m_ScriptablePass.downSamping = mysetting.downSamping;
-        m_ScriptablePass.NearDis = Mathf.Max(mysetting.NearDis, 0);
-        m_ScriptablePass.FarDis = Mathf.Max(mysetting.NearDis, mysetting.FarDis);
+        myPass = new CustomRenderPass(setting.profilerTag);
+        myPass.renderPassEvent = setting.renderPassEvent;
+        myPass.passMat = setting.material;
+        myPass.passIteration = setting.iteration;
+        myPass.passDownSample = setting.downSample;
+        myPass.passRadius = setting.radius;
+        myPass.passBlurSmoothness = setting.BlurSmoothness;
+        myPass.passNearCullDis = Mathf.Max(setting.NearCullDis, 0);
+        myPass.passFarCullDis = Mathf.Max(setting.NearCullDis, setting.FarCullDis);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        m_ScriptablePass.setup(renderer.cameraColorTarget);
-        renderer.EnqueuePass(m_ScriptablePass);
+        myPass.Setup(renderer.cameraColorTarget);
+        renderer.EnqueuePass(myPass);
     }
-
 }

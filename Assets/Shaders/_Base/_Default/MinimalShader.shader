@@ -13,7 +13,12 @@ Shader "Practical-URP/Minimal"
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-        float4 _MainTex_ST;
+        
+        CBUFFER_START(UnityPerMaterial)
+            float4 _MainTex_ST;
+            float4 _MainTex_TexelSize;
+        CBUFFER_END
+        
         TEXTURE2D(_MainTex);
         SAMPLER(sampler_MainTex);
 

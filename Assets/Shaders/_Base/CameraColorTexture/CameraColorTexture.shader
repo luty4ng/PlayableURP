@@ -4,7 +4,7 @@ Shader "Practical-URP/Base/CameraColorTexture"
     {
         Pass
         {
-            Tags { "LightMode" = "AfterTransparents" }
+            Tags { "LightMode" = "DrawCameraTextureAlpha" }
             
             HLSLPROGRAM
             #pragma vertex vert

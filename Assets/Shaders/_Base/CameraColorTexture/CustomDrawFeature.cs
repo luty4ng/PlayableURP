@@ -19,8 +19,8 @@ public class CustomDrawFeature : ScriptableRendererFeature
         private RenderTargetIdentifier source { get; set; }
         private RenderTargetHandle destination { get; set; }
         private FilteringSettings m_FilteringSettings;
-        public string m_ProfilerTag = "DrawAfterTransparents";
-        public ShaderTagId m_ShaderTagId = new ShaderTagId("AfterTransparents");
+        public string m_ProfilerTag;
+        public ShaderTagId m_ShaderTagId;
         public CustomDrawPass(RenderPassEvent passEvent)
         {
             renderPassEvent = passEvent;
@@ -35,16 +35,19 @@ public class CustomDrawFeature : ScriptableRendererFeature
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             CommandBuffer buffer = CommandBufferPool.Get(m_ProfilerTag);
-            context.ExecuteCommandBuffer(buffer);
-            buffer.Clear();
 
-            var sortedFlags = renderingData.cameraData.defaultOpaqueSortFlags;
-            var drawSettings = CreateDrawingSettings(m_ShaderTagId, ref renderingData, sortedFlags);
-            drawSettings.perObjectData = PerObjectData.None;
+            using (new ProfilingScope(buffer, new ProfilingSampler(m_ProfilerTag)))
+            {
+                // context.ExecuteCommandBuffer(buffer);
+                // buffer.Clear();
+                var sortedFlags = renderingData.cameraData.defaultOpaqueSortFlags;
+                var drawSettings = CreateDrawingSettings(m_ShaderTagId, ref renderingData, sortedFlags);
+                drawSettings.perObjectData = PerObjectData.None;
 
-            ref CameraData cameraData = ref renderingData.cameraData;
-            Camera camera = cameraData.camera;
-            context.DrawRenderers(renderingData.cullResults, ref drawSettings, ref m_FilteringSettings);
+                ref CameraData cameraData = ref renderingData.cameraData;
+                Camera camera = cameraData.camera;
+                context.DrawRenderers(renderingData.cullResults, ref drawSettings, ref m_FilteringSettings);
+            }
             context.ExecuteCommandBuffer(buffer);
             CommandBufferPool.Release(buffer);
         }

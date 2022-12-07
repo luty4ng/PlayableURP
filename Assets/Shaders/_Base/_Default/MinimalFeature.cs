@@ -41,9 +41,9 @@ public class MinimalFeature : ScriptableRendererFeature
             cmd.GetTemporaryRT(m_PassDefaultTempTex.id, opaquedesc, passFilterMode);
             Blit(cmd, passSource, m_PassDefaultTempTex.Identifier(), passMat, passMatCount);
             Blit(cmd, m_PassDefaultTempTex.Identifier(), passSource);
+            cmd.ReleaseTemporaryRT(m_PassDefaultTempTex.id);
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
-            cmd.ReleaseTemporaryRT(m_PassDefaultTempTex.id);
         }
     }
 

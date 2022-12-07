@@ -22,10 +22,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 596feb1b6735bc849babf52d7a696a3a, type: 2}
   - {fileID: 11400000, guid: 7a8e8563cfdec4546a411d1a1ed525bc, type: 2}
   - {fileID: 11400000, guid: 2df5ab2864f421044aa7a8056288531c, type: 2}
-  - {fileID: 11400000, guid: 3d9c81ea4157a544d86a2b1a8e2cf6e1, type: 2}
+  - {fileID: 11400000, guid: 0690ff465f3464248a2ca100b8d90de8, type: 2}
   - {fileID: 11400000, guid: 04b9c7691b7a9fc4db5b1eb277132d2c, type: 2}
   - {fileID: 11400000, guid: 886b32d85bb2b9b48850e0d5867318e7, type: 2}
   - {fileID: 11400000, guid: a868faeb39cb2b54cbdc65b86cc0efa8, type: 2}
+  - {fileID: 11400000, guid: d08cef4b84479a7428da8ce9d7f25baa, type: 2}
+  - {fileID: 11400000, guid: 3d9c81ea4157a544d86a2b1a8e2cf6e1, type: 2}
   m_DefaultRendererIndex: 0
   m_RequireDepthTexture: 1
   m_RequireOpaqueTexture: 0

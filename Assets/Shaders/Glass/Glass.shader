@@ -11,8 +11,7 @@ Shader "Practical-URP/Glass"
 
     SubShader
     {
-        Tags { "RenderPipeline" = "UniversalRenderPipeline" "RenderType" = "Transparent" "Queue" = "Transparent" }
-
+       // Tags { "LightMode" = "AfterTransparents" "RenderPipeline" = "UniversalRenderPipeline" "RenderType" = "Transparent" "Queue" = "Transparent" }
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/lighting.hlsl"
@@ -26,9 +25,10 @@ Shader "Practical-URP/Glass"
 
         float4 _CameraColorTexture_TexelSize;//该向量是非本shader独有，不能放在常量缓冲区
         TEXTURE2D(_NormalTex);
+        TEXTURE2D(_CameraColorTextureAlpha);
         SAMPLER(sampler_NormalTex);
-        SAMPLER(_CameraColorTexture);
-    
+        SAMPLER(sampler_CameraColorTextureAlpha);
+        
         struct a2v
         {
             float4 positionOS : POSITION;
@@ -50,7 +50,7 @@ Shader "Practical-URP/Glass"
         pass
         {
 
-            Tags { "LightMode" = "UniversalForward" }
+            Tags { "LightMode" = "Glass" }
 
             HLSLPROGRAM
             #pragma vertex VERT
@@ -70,11 +70,16 @@ Shader "Practical-URP/Glass"
                 o.BtangentWS.w = positionWS.y;
                 o.normalWS.w = positionWS.z;
                 return o;
+
+                // v2f o;
+                // o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
+                // o.texcoord = i.texcoord;
+                // return o;
             }
 
             half4 FRAG(v2f i) : SV_TARGET
             {
-
+                // return SAMPLE_TEXTURE2D(_CameraColorTextureAlpha, sampler_CameraColorTextureAlpha, i.texcoord);
                 half4 normalTex = SAMPLE_TEXTURE2D(_NormalTex, sampler_NormalTex, i.texcoord) * _BaseColor;//获取法线贴图
                 float3 normalTS = UnpackNormalScale(normalTex, _NormalScale);//得到我们想要对比的切线空间法线
                 float2 SS_texcoord = i.positionCS.xy / _ScreenParams.xy;//获取屏幕UV
@@ -90,8 +95,7 @@ Shader "Practical-URP/Glass"
                 #else
                     float2 SS_bias = normalTS.xy * _Amount * _CameraColorTexture_TexelSize;//如果取的是切线空间的法线则执行它计算偏移，但是切线空间的法线不随着模型的旋转而变换；
                 #endif
-
-                float4 glassColor = tex2D(_CameraColorTexture, SS_texcoord + SS_bias);//把最终的颜色输出到屏幕即可
+                float4 glassColor = SAMPLE_TEXTURE2D(_CameraColorTextureAlpha, sampler_CameraColorTextureAlpha, SS_texcoord + SS_bias);
                 return real4(glassColor.xyz, 1);
             }
             ENDHLSL

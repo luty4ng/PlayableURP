@@ -35,7 +35,6 @@ SubShader
             v2f vert(a2v v)
             {
                 v2f o;
-
                 VertexPositionInputs positionInputs = GetVertexPositionInputs(v.positionOS.xyz);
                 o.positionCS = positionInputs.positionCS;
                 return o;

@@ -24,7 +24,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
-  m_Name: CameraColorTextureRenderer
+  m_Name: GlassRenderer
   m_EditorClassIdentifier: 
   debugShaders:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7,
@@ -82,10 +82,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ff33e12533b7c24f9e9999e8f83daab, type: 3}
-  m_Name: DrawCameraTexture
+  m_Name: DrawGlass
   m_EditorClassIdentifier: 
   m_Active: 1
   setting:
-    profilerTag: DrawCameraColorTexture
-    shaderTagId: DrawCameraTextureAlpha
+    profilerTag: DrawGlass
+    shaderTagId: Glass
     renderPassEvent: 550

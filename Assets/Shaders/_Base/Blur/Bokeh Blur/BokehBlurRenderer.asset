@@ -1,19 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8020906816390265543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 425d201c741ce174ea3d5219da030385, type: 3}
-  m_Name: CameraColorTextureFeature
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  renderPassEvent: 500
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
-  m_Name: CameraColorTextureRenderer
+  m_Name: BokehBlurRenderer
   m_EditorClassIdentifier: 
   debugShaders:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7,
       type: 3}
   m_RendererFeatures:
-  - {fileID: -8020906816390265543}
-  - {fileID: 1596690248806508393}
-  m_RendererFeatureMap: 39858c40bf03b0906927715852952816
+  - {fileID: 4333786419736014097}
+  m_RendererFeatureMap: 11edc690c9b3243c
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -72,7 +57,7 @@ MonoBehaviour:
   m_ClusteredRendering: 0
   m_TileSize: 32
   m_IntermediateTextureMode: 1
---- !u!114 &1596690248806508393
+--- !u!114 &4333786419736014097
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -81,11 +66,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ff33e12533b7c24f9e9999e8f83daab, type: 3}
-  m_Name: DrawCameraTexture
+  m_Script: {fileID: 11500000, guid: e5f75d9efe32378429c4436435bd9c9a, type: 3}
+  m_Name: BokehBlurFeature
   m_EditorClassIdentifier: 
   m_Active: 1
   setting:
-    profilerTag: DrawCameraColorTexture
-    shaderTagId: DrawCameraTextureAlpha
-    renderPassEvent: 550
+    profilerTag: Bokeh Blur
+    renderPassEvent: 500
+    material: {fileID: 2100000, guid: 2c46e15c8b69c054195204b900f2cf07, type: 2}
+    downSample: 2
+    iteration: 72
+    radius: 1
+    BlurSmoothness: 0.103
+    NearCullDis: 5
+    FarCullDis: 9
