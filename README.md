@@ -10,55 +10,43 @@ URP下实用功能实现和效果积累，作为学习记录和生产模板。
 
 #### 基于像素世界坐标的后处理扫描效果（带描边）
 
-![image-20221206164719169](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221206164719169.png)
+![image-20221206164719169](https://s2.loli.net/2022/12/07/n1GbXkudyNewVj5.png)
 
-#### 后处理热扭曲效果
+#### RenderMask+后处理热扭曲效果
 
-![image-20221206164843457](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221206164843457.png)
+![image-20221206164938766](https://s2.loli.net/2022/12/07/n4Y7UaRl3KfXCAO.png)
 
 #### 不过滤透明对象的CameraColorTextureAlpha
 
-![image-20221206164104351](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221206164104351.png)
+![image-20221206164104351](https://s2.loli.net/2022/12/07/7GdyTRiQEW4zuMO.png)
 
-#### 显性计算CameraDepthNormalsTexture
+#### 手动生成CameraDepthNormalsTexture
 
-![image-20221206164224106](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221206164224106.png)
+![image-20221206164224106](https://s2.loli.net/2022/12/07/hgreb6QjwPpVAxD.png)
 
+#### 手动多光源处理
 
+![image-20221206164319011](https://s2.loli.net/2022/12/07/aWTBoyb1ps69rG4.png)
 
-#### 显性多光源处理
-
-![image-20221206164319011](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221206164319011.png)
-
-
-
-#### 基于BillBard的LensFlare
+#### BillBoard LensFlare
 
 （假装这块装是辉光）
 
-![image-20221206164443549](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221206164443549.png)
-
-
+![image-20221206164443549](https://s2.loli.net/2022/12/07/pvj9iUIO6PeqNLK.png)
 
 #### 深度图重构像素世界坐标
 
-![image-20221206164532181](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221206164532181.png)
-
-
+![image-20221206164532181](https://s2.loli.net/2022/12/07/n93GXvQxfg1OTUe.png)
 
 #### 后处理模糊
 
 分别为Radial, Kawase, Dual Kawase
 
-![image-20221206165026827](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221206165026827.png)
+![image-20221206165026827](https://s2.loli.net/2022/12/07/rMpck9bReB4xd81.png)
 
-![image-20221206165035986](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221206165035986.png)
+![image-20221206165035986](https://s2.loli.net/2022/12/07/lQU2Frm4ZwvSfty.png)
 
-![image-20221206165044151](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221206165044151.png)
-
-
-
-
+![image-20221206165044151](https://s2.loli.net/2022/12/07/hwbcIXugW3zOTki.png)
 
 ### 参考
 
