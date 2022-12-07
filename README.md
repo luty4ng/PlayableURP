@@ -1,6 +1,6 @@
 # Practical-URP
 
-URP下实用功能实现和效果积累，作为学习记录和生产模板。
+URP下实用功能实现和效果积累，作为入门学习记录、生产模板积累，将一些老教程的案例复现在新环境下。
 
 版本：2021.3.8f
 
@@ -19,6 +19,10 @@ URP下实用功能实现和效果积累，作为学习记录和生产模板。
 #### 不过滤透明对象的CameraColorTextureAlpha
 
 ![image-20221206164104351](https://s2.loli.net/2022/12/07/7GdyTRiQEW4zuMO.png)
+
+#### Normalmap Glass
+
+![image-20221207144704266](https://s2.loli.net/2022/12/07/tVguLaNpY71jZ2y.png)
 
 #### 手动生成CameraDepthNormalsTexture
 
@@ -40,13 +44,15 @@ URP下实用功能实现和效果积累，作为学习记录和生产模板。
 
 #### 后处理模糊
 
-分别为Radial, Kawase, Dual Kawase
+分别为Radial, Kawase, Dual Kawase, Bokeh Blur
 
 ![image-20221206165026827](https://s2.loli.net/2022/12/07/rMpck9bReB4xd81.png)
 
 ![image-20221206165035986](https://s2.loli.net/2022/12/07/lQU2Frm4ZwvSfty.png)
 
 ![image-20221206165044151](https://s2.loli.net/2022/12/07/hwbcIXugW3zOTki.png)
+
+![image-20221207144504296](https://s2.loli.net/2022/12/07/xvQC7HUe1hLTsft.png)
 
 ### 参考
 
