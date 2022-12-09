@@ -68,7 +68,7 @@ Shader "Practical-URP/Base/DepthNormalsTexture"
                 Varyings output = (Varyings)0;
                 
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
-                
+
                 output.positionCS = vertexInput.positionCS;
                 output.normal_depth.xyz = mul((float3x3)UNITY_MATRIX_IT_MV, input.normalOS);
                 output.normal_depth.w = - (vertexInput.positionVS.z * _ProjectionParams.w);
