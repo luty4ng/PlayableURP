@@ -181,7 +181,6 @@ Shader "Practical-URP/Effect/SimpleWater"
                 float4 surfaceNoiseColor = _FoamColor;
                 surfaceNoiseColor.a *= surfaceNoise;
                 return alphaBlend(surfaceNoiseColor, waterColor);
-
             }
             ENDHLSL
         }

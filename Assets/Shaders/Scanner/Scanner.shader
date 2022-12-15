@@ -36,8 +36,8 @@ Shader "Practical-URP/PostProcessing/Scanner"
         SAMPLER(sampler_MainTex);
         TEXTURE2D(_DetailTex);
         SAMPLER(sampler_DetailTex);
-        // TEXTURE2D(_CameraDepthTexture);
-        // SAMPLER(sampler_CameraDepthTexture);
+        TEXTURE2D(_CameraDepthTexture);
+        SAMPLER(sampler_CameraDepthTexture);
         TEXTURE2D(_CameraDepthNormalsTexture);
         SAMPLER(sampler_CameraDepthNormalsTexture);
 
@@ -117,6 +117,29 @@ Shader "Practical-URP/PostProcessing/Scanner"
                 return SAMPLE_TEXTURE2D(_DetailTex, sampler_DetailTex, float2(uv.x * 30, uv.y * 40));
             }
 
+            // inline float DecodeFloatRG(float2 enc)
+            // {
+            //     float2 kDecodeDot = float2(1.0, 1 / 255.0);
+            //     return dot(enc, kDecodeDot);
+            // }
+            
+            // inline float3 DecodeNormal(float4 enc)
+            // {
+            //     float kScale = 1.7777;
+            //     float3 nn = enc.xyz * float3(2 * kScale, 2 * kScale, 0) + float3(-kScale, -kScale, 1);
+            //     float g = 2.0 / dot(nn.xyz, nn.xyz);
+            //     float3 n;
+            //     n.xy = g * nn.xy;
+            //     n.z = g - 1;
+            //     return n;
+            // }
+            
+            // inline  void  DecodeDepthNormal(float4 enc, out float depth, out float3 normal)
+            // {
+            //     depth = DecodeFloatRG(enc.zw);
+            //     normal = DecodeNormal(enc);
+            // }
+
             int sobel(v2f i);
 
             real4 frag(v2f input) : SV_TARGET
@@ -129,19 +152,23 @@ Shader "Practical-URP/PostProcessing/Scanner"
                 // return depthNormalTex;
                 real linear01Depth = depthNormalTex.z * 1.0 + depthNormalTex.w / 255.0;
                 real linearDepth = linear01Depth * _ProjectionParams.z;
-                // return real4(depthNormalTex.z, depthNormalTex.z, depthNormalTex.z, 1);
 
-                // real rawDepth = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, input.uv_depth);
-                // real linearDepth = LinearEyeDepth(rawDepth, _ZBufferParams);
-                // real linear01Depth = Linear01Depth(rawDepth, _ZBufferParams);
-                // return real4(linear01Depth, linear01Depth, linear01Depth, 1) * 50;
+                // real depth;
+                // real3 normal;
+                // DecodeDepthNormal(depthNormalTex, depth, normal);
+                // return depth;
+
+                real rawDepth = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, input.uv_depth);
+                // real rawLinearDepth = LinearEyeDepth(rawDepth, _ZBufferParams);
+                real rawLinear01Depth = Linear01Depth(rawDepth, _ZBufferParams);
+                // return real4(rawLinear01Depth, rawLinear01Depth, rawLinear01Depth, 1) * 50;
                 
                 float3 fragPosVS = linearDepth * input.interpolatedRay;
                 float3 fragPosWS = _WorldSpaceCameraPos + fragPosVS;
                 
                 float dist = distance(fragPosWS, _WorldSpaceScannerPos);
                 real4 scannerColor = real4(0, 0, 0, 0);
-                if (dist < _ScanDistance && dist > _ScanDistance - _ScanWidth && depthNormalTex.z > 0)
+                if (dist < _ScanDistance && dist > _ScanDistance - _ScanWidth && rawLinear01Depth < 1)
                 {
                     float diff = 1 - (_ScanDistance - dist) / (_ScanWidth);
                     real4 edge = lerp(_MidColor, _LeadColor, pow(diff, _LeadSharp));

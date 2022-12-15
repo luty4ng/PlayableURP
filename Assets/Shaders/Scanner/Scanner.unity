@@ -645,7 +645,7 @@ MonoBehaviour:
   ScannerFeature: {fileID: 4849701104906088791, guid: 7a8e8563cfdec4546a411d1a1ed525bc,
     type: 2}
   ScannerOrigin: {fileID: 932236200}
-  ScanDistance: 5.52
+  ScanDistance: 5.92
   m_CachedMaterial: {fileID: 2100000, guid: 544dcb3d8963f6a49bd7eb2f903954c3, type: 2}
 --- !u!1 &2138677391
 GameObject:
