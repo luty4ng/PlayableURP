@@ -4,8 +4,6 @@ URP下实用功能实现和效果积累，作为入门学习记录、生产模�
 
 版本：2021.3.8f
 
-
-
 ### 内容
 
 #### 后处理扫描效果（像素世界坐标 + 描边）
@@ -59,6 +57,10 @@ URP下实用功能实现和效果积累，作为入门学习记录、生产模�
 ![image-20221206165044151](https://s2.loli.net/2022/12/07/hwbcIXugW3zOTki.png)
 
 ![image-20221207144504296](https://s2.loli.net/2022/12/07/xvQC7HUe1hLTsft.png)
+
+#### 后处理Outline
+
+![202212191204652.png](https://s2.loli.net/2022/12/19/BDfkm4auvOV5bQU.png)
 
 ### 参考
 

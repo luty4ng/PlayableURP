@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 15737052}
   - component: {fileID: 15737051}
   - component: {fileID: 15737050}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -525,7 +525,7 @@ GameObject:
   - component: {fileID: 971435426}
   - component: {fileID: 971435425}
   - component: {fileID: 971435424}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -782,7 +782,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 11
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -810,7 +810,7 @@ GameObject:
   - component: {fileID: 1994971453}
   - component: {fileID: 1994971452}
   - component: {fileID: 1994971451}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -907,7 +907,7 @@ GameObject:
   - component: {fileID: 2102833818}
   - component: {fileID: 2102833817}
   - component: {fileID: 2102833816}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -985,7 +985,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2102833815}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.0394738, y: -0.36367178, z: 0.9653909}
+  m_LocalPosition: {x: -2.08, y: -0.36367178, z: 0.9653909}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

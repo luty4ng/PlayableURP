@@ -1,9 +1,10 @@
 Shader "Practical-URP/Outline"
 {
-
     Properties
     {
-        _MainTex ("MainTex", 2D) = "white" { }
+        [HideInInspector]_MainTex ("MainTex", 2D) = "white" { }
+        [HideInInspector]_SolidColor ("SoildColor", Color) = (1, 1, 1, 1)
+        [HideInInspector]_Blur ("Blur", float) = 1
     }
 
     SubShader
@@ -17,21 +18,27 @@ Shader "Practical-URP/Outline"
         CBUFFER_START(UnityPerMaterial)
             float4 _MainTex_ST;
             float4 _MainTex_TexelSize;
+            real4 _SolidColor;
+            float _Blur;
         CBUFFER_END
         
         TEXTURE2D(_MainTex);
         SAMPLER(sampler_MainTex);
+        TEXTURE2D(_BlurTex);
+        SAMPLER(sampler_BlurTex);
+        TEXTURE2D(_SourTex);
+        SAMPLER(sampler_SourTex);
 
         struct a2v
         {
             float4 positionOS : POSITION;
-            float2 uv : TEXCOORD;
+            float2 texcoord : TEXCOORD;
         };
 
         struct v2f
         {
             float4 positionCS : SV_POSITION;
-            float2 uv : TEXCOORD;
+            float4 texcoord[4] : TEXCOORD;
         };
         ENDHLSL
 
@@ -45,20 +52,19 @@ Shader "Practical-URP/Outline"
             {
                 v2f o;
                 o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
-                o.uv = i.uv;
                 return o;
             }
 
             half4 frag(v2f i) : SV_TARGET
             {
-                return float4(1, 1, 1, 1);
+                return _SolidColor;;
             }
             ENDHLSL
         }
         
         pass
         {
-
+            Name "Down"
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -67,13 +73,96 @@ Shader "Practical-URP/Outline"
             {
                 v2f o;
                 o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
-                o.uv = i.uv;
+                o.texcoord[2].xy = i.texcoord;
+                o.texcoord[0].xy = i.texcoord + float2(1, 1) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                o.texcoord[0].zw = i.texcoord + float2(-1, 1) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                o.texcoord[1].xy = i.texcoord + float2(1, -1) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                o.texcoord[1].zw = i.texcoord + float2(-1, -1) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
                 return o;
             }
 
             half4 frag(v2f i) : SV_TARGET
             {
-                return float4(1, 1, 1, 1);
+                half4 tex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord[2].xy) * 0.5;
+                for (int t = 0; t < 2; t++)
+                {
+                    tex += SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord[t].xy) * 0.125;
+                    tex += SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord[t].zw) * 0.125;
+                }
+                return tex;
+            }
+            ENDHLSL
+        }
+
+
+        pass
+        {
+            Name "Up"
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            v2f vert(a2v i)
+            {
+                v2f o;
+                o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
+                o.texcoord[0].xy = i.texcoord + float2(1, 1) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                o.texcoord[0].zw = i.texcoord + float2(-1, 1) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                o.texcoord[1].xy = i.texcoord + float2(1, -1) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                o.texcoord[1].zw = i.texcoord + float2(-1, -1) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                o.texcoord[2].xy = i.texcoord + float2(0, 2) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                o.texcoord[2].zw = i.texcoord + float2(0, -2) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                o.texcoord[3].xy = i.texcoord + float2(-2, 0) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                o.texcoord[3].zw = i.texcoord + float2(2, 0) * _MainTex_TexelSize.xy * (1 + _Blur) * 0.5;
+                return o;
+            }
+
+            half4 frag(v2f i) : SV_TARGET
+            {
+                half4 tex = 0;
+                for (int t = 0; t < 2; t++)
+                {
+                    tex += SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord[t].xy) / 6;
+                    tex += SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord[t].zw) / 6;
+                }
+
+                for (int k = 2; k < 4; k++)
+                {
+                    tex += SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord[k].xy) / 12;
+                    tex += SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord[k].zw) / 12;
+                }
+                return tex;
+            }
+            ENDHLSL
+        }
+
+        pass
+        {
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_local _INCOLORON _INCOLOROFF
+
+            v2f vert(a2v i)
+            {
+                v2f o;
+                o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
+                o.texcoord[0].xy = i.texcoord.xy;
+                return o;
+            }
+
+            half4 frag(v2f i) : SV_TARGET
+            {
+                real4 blur = SAMPLE_TEXTURE2D(_BlurTex, sampler_BlurTex, i.texcoord[0].xy);
+                real4 sour = SAMPLE_TEXTURE2D(_SourTex, sampler_SourTex, i.texcoord[0].xy);
+                real4 soild = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord[0].xy);
+                real4 color;
+                #ifdef _INCOLORON // internal outline on
+                    color = abs(blur - soild) + sour;
+                #elif _INCOLOROFF // internal outline off
+                    color = saturate(blur - soild) + sour;
+                #endif
+                return color;
             }
             ENDHLSL
         }
